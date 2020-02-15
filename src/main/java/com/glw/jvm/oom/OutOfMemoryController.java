@@ -23,6 +23,7 @@ public class OutOfMemoryController {
     private List<Class<?>> classList = new ArrayList<>();
 
     /**
+     * -Xmx32M -Xms32M
      * 堆内存溢出
      * @return
      */
@@ -32,6 +33,20 @@ public class OutOfMemoryController {
         int i = 0;
         while (true) {
             userList.add(new User(i++, UUID.randomUUID().toString()));
+        }
+    }
+
+    /**
+     * -XX:MetaspaceSize=64M -XX:MaxMetaspaceSize=64M
+     * 非堆内存溢出
+     * @return
+     */
+    @ApiOperation(value = "非堆内存溢出", notes = "非堆内存溢出")
+    @GetMapping("/noheap")
+    public String noheap() {
+        int i = 0;
+        while (true) {
+            classList.addAll(Metaspace.createClass());
         }
     }
 }
