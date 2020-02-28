@@ -16,7 +16,7 @@ import java.util.UUID;
  * @Description : 内存溢出接口
  */
 @Api(tags = "内存溢出接口")
-@RestController
+@RestController("oom")
 public class OutOfMemoryController {
 
     private List<User> userList = new ArrayList<>();
@@ -30,6 +30,20 @@ public class OutOfMemoryController {
     @ApiOperation(value = "堆内存溢出", notes = "堆内存溢出")
     @GetMapping("/heap")
     public String heap() {
+        int i = 0;
+        while (true) {
+            userList.add(new User(i++, UUID.randomUUID().toString()));
+        }
+    }
+
+    /**
+     * -Xmx32M -Xms32M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./
+     * 导出堆内存溢出dump文件到当前路径下
+     * @return
+     */
+    @ApiOperation(value = "导出堆内存溢出文件", notes = "导出堆内存溢出文件")
+    @GetMapping("/heap/export")
+    public String exportHeapFile() {
         int i = 0;
         while (true) {
             userList.add(new User(i++, UUID.randomUUID().toString()));
